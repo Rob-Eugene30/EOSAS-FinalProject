@@ -25,21 +25,21 @@ run;
   Frequency tables & cross-tabulations, using the custom formats
   above to make the output business-readable
 ------------------------------------------------------------------*/
-title "Stage 5: Churn Distribution by Risk Tier";
+title "Churn Distribution by Risk Tier";
 proc freq data=mylib.telco_final;
     format 'Churn Score'n risktier.;
     tables 'Churn Score'n * 'Churn Label'n / nocol norow nopercent;
 run;
 title;
 
-title "Stage 5: Churn by Contract Type and Internet Type";
+title "Churn by Contract Type and Internet Type";
 proc freq data=mylib.telco_final;
     tables Contract * 'Churn Label'n
            'Internet Type'n * 'Churn Label'n / nocol nopercent;
 run;
 title;
 
-title "Stage 5: Top Churn Reasons Among Month-to-Month Customers";
+title "Top Churn Reasons Among Month-to-Month Customers";
 proc freq data=mylib.telco_final order=freq;
     where 'Churn Label'n = "YES";
     tables 'Churn Category'n / nocum;
@@ -50,7 +50,7 @@ title;
   TECHNIQUE 3: PROC MEANS
   Group aggregation of the KPIs built in Stage 4, split by segment
 ------------------------------------------------------------------*/
-title "Stage 5: KPI Summary by Risk Tier";
+title "KPI Summary by Risk Tier";
 proc means data=mylib.telco_final n mean min max maxdec=2;
     class 'Churn Score'n;
     format 'Churn Score'n risktier.;
@@ -58,7 +58,7 @@ proc means data=mylib.telco_final n mean min max maxdec=2;
 run;
 title;
 
-title "Stage 5: KPI Summary by Contract Type";
+title "KPI Summary by Contract Type";
 proc means data=mylib.telco_final n mean std maxdec=2;
     class Contract;
     var 'Monthly Charge'n Revenue_Per_GB Refund_Rate_Pct;
@@ -69,7 +69,7 @@ title;
   TECHNIQUE 4: PROC SGPLOT
   Visual representation - bar chart and histogram
 ------------------------------------------------------------------*/
-title "Stage 5: Churn Rate by Contract Type";
+title "Churn Rate by Contract Type";
 proc sgplot data=mylib.telco_final;
     vbar Contract / group='Churn Label'n groupdisplay=cluster
                     stat=percent;
@@ -78,7 +78,7 @@ proc sgplot data=mylib.telco_final;
 run;
 title;
 
-title "Stage 5: Distribution of Risk-Adjusted CLTV";
+title "Distribution of Risk-Adjusted CLTV";
 proc sgplot data=mylib.telco_final;
     histogram Risk_Adjusted_CLTV / fillattrs=(color=steelblue) binwidth=250;
     density Risk_Adjusted_CLTV;
@@ -86,7 +86,7 @@ proc sgplot data=mylib.telco_final;
 run;
 title;
 
-title "Stage 5: Monthly Charge vs Projected 12-Month Revenue";
+title "Monthly Charge vs Projected 12-Month Revenue";
 proc sgplot data=mylib.telco_final;
     scatter x='Monthly Charge'n y=Projected_12Month_Revenue /
             group='Churn Label'n transparency=0.4;
@@ -100,7 +100,7 @@ title;
   TECHNIQUE 5 (bonus): PROC UNIVARIATE
   Detailed distribution analysis of the key revenue projection KPI
 ------------------------------------------------------------------*/
-title "Stage 5: Distribution Analysis - Projected 12-Month Revenue";
+title "Distribution Analysis - Projected 12-Month Revenue";
 proc univariate data=mylib.telco_final;
     var Projected_12Month_Revenue;
     histogram / normal;
