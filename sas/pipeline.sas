@@ -7,7 +7,6 @@ options validvarname=any;
 
 /*==========================================================
   PARAMETERIZED PIPELINE MACRO
-  Wraps Stages 01-05. Stage 06 to be added once specified.
 ==========================================================*/
 
 %macro RunPipeline(
